@@ -2,6 +2,7 @@
 Star[] spaceSky = new Star[200];
 Spaceship USS = new Spaceship();
 
+ArrayList <Bullet> pew = new ArrayList<Bullet>();
 ArrayList <Asteroid> asteroid = new ArrayList<Asteroid>();
 
 public void setup() 
@@ -15,8 +16,8 @@ public void setup()
   {
     asteroid.add(new Asteroid());
   }
-  USS.accelerate(1);
 }
+
 public void draw() 
 {
   background(0);
@@ -30,10 +31,31 @@ public void draw()
   {
     asteroid.get(i).show();
     asteroid.get(i).move();
-    float dis = dist((float)USS.getX(),(float)USS.getY(), (float)asteroid.get(i).getX(), (float)asteroid.get(i).getY());
+    float dis= dist((float)USS.getX(), (float)USS.getY(), (float)asteroid.get(i).getX(), (float)asteroid.get(i).getY());
     if(dis<20)
     {
       asteroid.remove(i);
+    }
+  }
+  for(int i=0; i<pew.size();i++)
+  {
+    pew.get(i).move();
+    pew.get(i).show();
+    for(int j=0;j<asteroid.size();j++)
+    {
+      float d= dist((float)pew.get(i).getX(), (float)pew.get(i).getY(), (float)asteroid.get(j).getX(), (float)asteroid.get(j).getY());
+      if(d<10)
+      {
+        asteroid.remove(j);
+        pew.remove(i);
+      }
+    }
+  }
+  if(asteroid.size() == 0)
+  {
+    for(int i=0; i<15;i++)
+    {
+      asteroid.add(new Asteroid());
     }
   }
 }
@@ -58,5 +80,9 @@ public void keyPressed()
   if(key == 's')
   {
     USS.accelerate(-2);
+  }
+  if(key == ' ')
+  {
+    pew.add(new Bullet());
   }
 }
